@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # LANGTU keyboard status for waybar.
 #   Bluetooth: real battery %          󰌌 83%
-#   Cable:     charging (+% if BT too) 󰌌 󱐋 wired  /  󰌌 󱐋 83%
+#   Cable:     charging (+% if BT too) 󰌌 󱐋  /  󰌌 󱐋 83%
 #   2.4G:      mode only (the receiver doesn't report battery)  󰌌 2.4G
 # With "watch", stays running and reprints on USB plug/unplug and Bluetooth changes.
 mac="33:9B:B4:36:17:16"
@@ -19,33 +19,27 @@ usb_present() {
 }
 
 emit() {
-    local bt_pct="" wired="" dongle_present="" class text tip
-    if bluetoothctl info "$mac" 2>/dev/null | grep -q 'Connected: yes'; then
-        bt_pct=$(bluetoothctl info "$mac" | grep -oP 'Battery Percentage:.*\(\K[0-9]+')
-    fi
-
-    usb_present "$cable" && wired=1
-    usb_present "$dongle" && dongle_present=1
+    local info bt_pct="" name class text
+    info=$(bluetoothctl info "$mac" 2>/dev/null)
+    # tooltip is always the keyboard's name; it stays paired in every mode
+    name=$(grep -oP 'Alias: \K.*' <<<"$info"); name=${name:-LANGTU}
+    grep -q 'Connected: yes' <<<"$info" && bt_pct=$(grep -oP 'Battery Percentage:.*\(\K[0-9]+' <<<"$info")
 
     class="kbd"
-    if [ -n "$wired" ]; then
-        text="$kb $bolt ${bt_pct:+$bt_pct%}"; [ -z "$bt_pct" ] && text="$kb $bolt wired"
-        tip="Keyboard: wired, charging${bt_pct:+ (battery $bt_pct% via Bluetooth)}"
+    if usb_present "$cable"; then
+        text="$kb $bolt${bt_pct:+ $bt_pct%}"
         class="charging"
     elif [ -n "$bt_pct" ]; then
         text="$kb $bt_pct%"
-        tip="Keyboard: Bluetooth, battery $bt_pct%"
         [ "$bt_pct" -le 20 ] && class="low"
-    elif [ -n "$dongle_present" ]; then
+    elif usb_present "$dongle"; then
         text="$kb 2.4G"
-        tip="Keyboard: 2.4G receiver (battery not reported in this mode)"
     else
-        text=$'\U000f030c'
-        tip="Keyboard: not connected"
+        text="$kb"
         class="disconnected"
     fi
 
-    printf '{"text":"%s","tooltip":"%s","class":"%s"}\n' "$text" "$tip" "$class"
+    printf '{"text":"%s","tooltip":"%s","class":"%s"}\n' "$text" "$name" "$class"
 }
 
 if [ "$1" != "watch" ]; then
