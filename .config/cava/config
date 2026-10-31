@@ -242,12 +242,12 @@
 
 [color]
 background = default
-foreground = '#779BC3'
+foreground = '#803F81'
 gradient = 1
 gradient_count = 3
-gradient_color_1 = '#6B8FB7'
-gradient_color_2 = '#779BC3'
-gradient_color_3 = '#c2c4c6'
+gradient_color_1 = '#664D87'
+gradient_color_2 = '#803F81'
+gradient_color_3 = '#c2c4c7'
 
 [smoothing]
 

@@ -1,0 +1,6 @@
+/* pywal colors for GTK, regenerated on every wallpaper change. */
+@define-color wal_bg {background};
+@define-color wal_fg {foreground};
+@define-color wal_accent {color4};
+@define-color wal_accent2 {color6};
+@define-color wal_dim {color8};

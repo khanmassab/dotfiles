@@ -1,0 +1,103 @@
+/* Thunar themed from the current wallpaper (pywal). Colors: ~/.config/wal/templates/colors-gtk.css
+   Backgrounds are translucent; Hyprland's blur shows a frosted wallpaper behind them. */
+@import url("file:///home/massab/.cache/wal/colors-gtk.css");
+
+/* only the window paints the base tint; inner containers stay clear so alpha doesn't stack */
+window.thunar {
+    background-color: alpha(@wal_bg, 0.72);
+    color: @wal_fg;
+}
+window.thunar .background,
+window.thunar scrolledwindow,
+window.thunar viewport,
+window.thunar .view,
+window.thunar iconview,
+window.thunar treeview,
+window.thunar notebook,
+window.thunar notebook > stack,
+window.thunar notebook > header {
+    background-color: transparent;
+    color: @wal_fg;
+}
+
+/* selection */
+window.thunar .view:selected,
+window.thunar iconview:selected,
+window.thunar treeview:selected,
+window.thunar .view:selected:focus,
+window.thunar iconview:selected:focus,
+window.thunar treeview:selected:focus,
+window.thunar .view text:selected {
+    background-color: alpha(@wal_accent, 0.75);
+    color: @wal_fg;
+    border-radius: 6px;
+}
+window.thunar .view:hover,
+window.thunar iconview:hover {
+    background-color: alpha(@wal_fg, 0.07);
+}
+window.thunar treeview header button {
+    background-image: none;
+    background-color: alpha(@wal_fg, 0.05);
+    color: @wal_fg;
+    border-color: alpha(@wal_fg, 0.1);
+}
+
+/* sidebar: slightly darker glass */
+window.thunar .sidebar,
+window.thunar .sidebar treeview,
+window.thunar .sidebar .view {
+    background-color: alpha(@wal_bg, 0.35);
+    color: alpha(@wal_fg, 0.85);
+}
+
+/* menubar, toolbar, path bar, status bar */
+window.thunar menubar,
+window.thunar toolbar,
+window.thunar .toolbar,
+window.thunar headerbar,
+window.thunar statusbar {
+    background-image: none;
+    background-color: alpha(@wal_fg, 0.05);
+    color: @wal_fg;
+    border-color: alpha(@wal_fg, 0.08);
+    box-shadow: none;
+}
+window.thunar menubar > menuitem { color: @wal_fg; }
+window.thunar menubar > menuitem:hover {
+    background-color: alpha(@wal_accent, 0.35);
+    box-shadow: none;
+}
+
+window.thunar button {
+    background-image: none;
+    background-color: alpha(@wal_fg, 0.07);
+    color: @wal_fg;
+    border-color: alpha(@wal_fg, 0.12);
+    box-shadow: none;
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+}
+window.thunar button:hover { background-color: alpha(@wal_fg, 0.14); }
+window.thunar button:checked,
+window.thunar button:active {
+    background-color: alpha(@wal_accent, 0.6);
+    color: @wal_fg;
+}
+
+window.thunar entry {
+    background-image: none;
+    background-color: alpha(@wal_bg, 0.45);
+    color: @wal_fg;
+    border-color: alpha(@wal_fg, 0.15);
+    box-shadow: none;
+}
+window.thunar entry:focus { border-color: @wal_accent; }
+
+window.thunar paned > separator {
+    background-image: none;
+    background-color: alpha(@wal_fg, 0.08);
+}
+
+window.thunar scrollbar slider { background-color: alpha(@wal_fg, 0.35); }
+window.thunar scrollbar { background-color: transparent; border: none; }
