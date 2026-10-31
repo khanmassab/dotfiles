@@ -69,7 +69,9 @@ def main():
         return
 
     if mode == "icon":
-        print(icon_path(player) if player else "")
+        # never print nothing: waybar keeps the previous icon on empty output.
+        # A path that doesn't exist makes it clear the image and add the "empty" class.
+        print((icon_path(player) if player else "") or "none")
         return
 
     if mode == "playicon":
