@@ -131,9 +131,10 @@ menu menuitem,
 menu menuitem:hover,
 .menu menuitem:hover {
     background-color: @wal_border;
-    color: @wal_bg;
 }
-menu menuitem:hover label { color: @wal_bg; }
+/* ">" so a hovered row with an open submenu doesn't recolor the submenu nested under it */
+menu menuitem:hover > label,
+menu menuitem:hover > box > label { color: @wal_bg; }
 menu menuitem:disabled,
 menu menuitem:disabled label { color: alpha(@wal_fg, 0.45); }
 menu separator { background-color: alpha(@wal_fg, 0.12); margin: 4px 8px; }
@@ -147,7 +148,7 @@ menu check {
     min-height: 10px;
 }
 menu radio:checked { background-color: @wal_border; border-color: @wal_border; }
-menu menuitem:hover radio { border-color: @wal_bg; }
+menu menuitem:hover > radio { border-color: @wal_bg; }
 menu arrow { color: alpha(@wal_fg, 0.6); }
 
 /* the audio menu also uses the bar's font */
@@ -160,3 +161,4 @@ menu.audio-menu menuitem.audio-menu-header label {
     color: @wal_border;
     font-size: 0.85em;
 }
+
