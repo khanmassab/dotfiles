@@ -54,9 +54,9 @@
         "format-icons": { "default": ["", "", ""] },
         "scroll-step": 5,
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-right": "pavucontrol",
+        "on-click-right": "python3 -I ~/.config/waybar/audio-route.py",
         "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-        "tooltip-format": "{desc}\nScroll: volume · Click: mute · Right-click: mixer"
+        "tooltip-format": "{desc}\nScroll: volume · Click: mute · Right-click: route audio"
     },
     "pulseaudio/slider": {
         "min": 0,
