@@ -98,9 +98,8 @@
 
     /* Bluetooth keyboard battery */
     "custom/kbd-battery": {
-        "exec": "~/.config/waybar/kbd-battery.sh",
-        "return-type": "json",
-        "interval": 10
+        "exec": "~/.config/waybar/kbd-battery.sh watch",
+        "return-type": "json"
     },
 
     /* [TR] Bildirim Merkezi (SwayNC) / [EN] Notification Center (SwayNC) */
