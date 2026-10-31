@@ -100,7 +100,7 @@
     "custom/kbd-battery": {
         "exec": "~/.config/waybar/kbd-battery.sh",
         "return-type": "json",
-        "interval": 30
+        "interval": 10
     },
 
     /* [TR] Bildirim Merkezi (SwayNC) / [EN] Notification Center (SwayNC) */

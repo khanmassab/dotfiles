@@ -218,3 +218,8 @@ window#waybar {
     min-width: 4px;
 }
 #custom-media.paused { color: alpha(@foreground, 0.55); }
+
+/* --- ⌨️ KEYBOARD: charging / low / disconnected --- */
+#custom-kbd-battery.charging { color: @color9; }
+#custom-kbd-battery.low { color: @color1; }
+#custom-kbd-battery.disconnected { color: alpha(@foreground, 0.4); }
