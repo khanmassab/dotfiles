@@ -173,7 +173,9 @@ window#waybar {
     color: @color1;
 }
 
-/* --- 🎵 NOW PLAYING: app icon + text form one pill (both hide when nothing plays) --- */
+/* --- 🎵 NOW PLAYING: one pill = icon (left cap) + text + hover controls + end (right cap) ---
+   Middle pieces draw only top/bottom borders so the outline stays whole, open or closed;
+   everything hides when nothing is playing. */
 #image.media {
     background-color: @background;
     border: 2px solid @color9;
@@ -182,10 +184,37 @@ window#waybar {
     margin: 5px 0 5px 2px;
     padding: 0 2px 0 10px;
 }
-#custom-media {
+#custom-media,
+#custom-media-prev,
+#custom-media-play,
+#custom-media-next {
+    background-color: @background;
+    color: @foreground;
+    border: 2px solid @color9;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin: 5px 0;
+    padding: 0 0 0 6px;
+}
+#custom-media-prev,
+#custom-media-play,
+#custom-media-next {
+    padding: 0 6px;
+    font-size: 15px;
+}
+#custom-media-prev:hover,
+#custom-media-play:hover,
+#custom-media-next:hover {
+    color: @color9;
+}
+#custom-media-end {
+    background-color: @background;
+    border: 2px solid @color9;
     border-left: none;
     border-radius: 0 15px 15px 0;
-    margin-left: 0;
-    padding-left: 6px;
+    margin: 5px 2px 5px 0;
+    padding: 0 6px 0 0;
+    min-width: 4px;
 }
 #custom-media.paused { color: alpha(@foreground, 0.55); }

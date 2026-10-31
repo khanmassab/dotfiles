@@ -136,7 +136,38 @@
     /* Now playing: real app icon of whichever player is playing + track text */
     "group/media": {
         "orientation": "horizontal",
-        "modules": ["image#media", "custom/media"]
+        "modules": ["image#media", "group/media-drawer", "custom/media-end"]
+    },
+    /* hover the track text to slide out prev / play-pause / next inside the same pill */
+    "group/media-drawer": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 400,
+            "children-class": "media-ctl",
+            "transition-left-to-right": true
+        },
+        "modules": ["custom/media", "custom/media-prev", "custom/media-play", "custom/media-next"]
+    },
+    "custom/media-prev": {
+        "format": "󰒮",
+        "tooltip": false,
+        "on-click": "python3 -I ~/.config/waybar/media.py previous"
+    },
+    "custom/media-play": {
+        "exec": "python3 -I ~/.config/waybar/media.py playicon",
+        "interval": 1,
+        "tooltip": false,
+        "on-click": "python3 -I ~/.config/waybar/media.py play-pause"
+    },
+    "custom/media-next": {
+        "format": "󰒭",
+        "tooltip": false,
+        "on-click": "python3 -I ~/.config/waybar/media.py next"
+    },
+    "custom/media-end": {
+        "exec": "python3 -I ~/.config/waybar/media.py end",
+        "interval": 2,
+        "tooltip": false
     },
     "image#media": {
         "exec": "python3 -I ~/.config/waybar/media.py icon",

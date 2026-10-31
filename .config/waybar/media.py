@@ -3,6 +3,8 @@
 
   media.py text            JSON for the custom/media module ("artist - title")
   media.py icon            path of that player's app icon, for the image#media module
+  media.py playicon        play/pause glyph for the hover controls
+  media.py end             right cap of the pill (blank while playing, empty to hide)
   media.py play-pause|next|previous   control that same player
 """
 import html
@@ -68,6 +70,16 @@ def main():
 
     if mode == "icon":
         print(icon_path(player) if player else "")
+        return
+
+    if mode == "playicon":
+        playing = player and run("playerctl", "-p", player, "status") == "Playing"
+        print("󰏤" if playing else ("󰐊" if player else ""))
+        return
+
+    if mode == "end":
+        # right cap of the pill: present (a space) only while something is loaded
+        print(" " if player else "")
         return
 
     if not player:
