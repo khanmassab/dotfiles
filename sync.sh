@@ -11,6 +11,6 @@ for f in hyprland.lua hyprlock.conf hypridle.conf lock.sh wallpaper-picker.sh; d
 rsync -a --delete "$C/hypr/scripts/" .config/hypr/scripts/
 rsync -a --delete "$HOME/.local/share/sddm-themes/hyprlock-clone/" sddm/hyprlock-clone/
 mkdir -p .config/gtk-3.0 .config/wal/templates
-cp "$C/gtk-3.0/gtk.css" .config/gtk-3.0/
+cp "$C/gtk-3.0/gtk.css" "$C/gtk-3.0/settings.ini" .config/gtk-3.0/
 rsync -a --delete "$C/wal/templates/" .config/wal/templates/
 echo "Synced."

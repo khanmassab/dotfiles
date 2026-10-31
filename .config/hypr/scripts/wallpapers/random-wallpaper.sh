@@ -42,6 +42,7 @@ awww img "$WALL" --transition-type fade --transition-step 255 --transition-fps 2
         # [TR] Cache güncelleme (Kullanıcı adı bağımsız) / [EN] Update cache (User independent)
         cp "$WALL" "$HOME/.cache/current_wallpaper.png"
         $HOME/.config/hypr/scripts/wal-cava.sh
+        python3 -I $HOME/.config/hypr/scripts/wal-icons.py >/dev/null
     fi
 
     # [TR] Son Dokunuş: SwayNC'yi tam senkronize et / [EN] Final Touch: Fully sync SwayNC

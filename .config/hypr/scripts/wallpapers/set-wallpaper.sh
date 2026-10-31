@@ -45,6 +45,7 @@ awww img "$WALL" --transition-type fade --transition-step 255 --transition-fps 2
         # [TR] Evrensel cache yolu / [EN] Universal cache path
         cp "$WALL" "$HOME/.cache/current_wallpaper.png"
         $HOME/.config/hypr/scripts/wal-cava.sh
+        python3 -I $HOME/.config/hypr/scripts/wal-icons.py >/dev/null
     fi
 
     # [TR] Final Dokunuş: Her şeyi senkronize et / [EN] Final Touch: Sync everything.

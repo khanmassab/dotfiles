@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 echo "==> Installing packages"
 sudo pacman -S --needed hyprland kitty waybar wofi awww swaync hyprlock hypridle hyprpolkitagent \
     cava btop cmatrix fastfetch cliphist wl-clipboard grim slurp swappy ffmpeg mpv rsync \
-    pavucontrol playerctl brightnessctl network-manager-applet thunar gnome-keyring qt6-wayland \
+    pavucontrol playerctl brightnessctl network-manager-applet thunar gnome-keyring qt6-wayland papirus-icon-theme \
     ttf-jetbrains-mono-nerd sddm wlogout mpvpaper grimblast-git tty-clock
 yay -S --needed python-pywal16
 
@@ -26,6 +26,8 @@ echo "==> Generating colors from the default wallpaper"
 wal -i "$HOME/.config/wallpapers/central.png" -n -q -t -e
 cp "$HOME/.config/wallpapers/central.png" "$HOME/.cache/current_wallpaper.png"
 "$HOME/.config/hypr/scripts/wal-cava.sh"
+python3 -I "$HOME/.config/hypr/scripts/wal-icons.py"
+gsettings set org.gnome.desktop.interface icon-theme Papirus-Wal
 
 echo "==> Installing the SDDM login theme"
 ./sddm-hyprlock-theme.sh

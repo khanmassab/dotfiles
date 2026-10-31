@@ -47,6 +47,7 @@ mpvpaper -o "--loop --hwdec=auto-safe --no-audio" "*" "$VIDEO_PATH" &
         wal -i "$TEMP_THUMB" -n -q -t -e
         cp "$TEMP_THUMB" "$HOME/.cache/current_wallpaper.png"
         $HOME/.config/hypr/scripts/wal-cava.sh
+        python3 -I $HOME/.config/hypr/scripts/wal-icons.py >/dev/null
     fi
 
     # [TR] Son Dokunuş: Her şeyi senkronize et / [EN] Final Touch: Sync everything.
