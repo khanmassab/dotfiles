@@ -1,0 +1,95 @@
+@import url('/home/massab/.cache/wal/colors-waybar.css');
+
+/* Ana Pencere */
+window {
+  margin: 0px;
+  background-color: transparent; 
+  border: none;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Tüm İçeriği Tutan Kutu */
+#outer-box {
+  margin: 0px;
+  border: 2px solid @color9;
+  border-radius: 12px;
+  background-color: #000000;
+  padding: 5px;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Arama Kutusu */
+#input {
+  margin: 10px;
+  border: 2px solid @color9;
+  color: #ffffff;
+  background-color: #000000;
+  padding: 8px;
+  border-radius: 8px;
+  outline: none; /* Mavi çerçeveyi kesin olarak engeller */
+  box-shadow: none; /* Herhangi bir mavi parlamayı engeller */
+}
+
+/* Yazarken oluşan mavi seçim alanını senin rengine çevirir */
+#input * {
+  selection-background-color: @color9;
+  selection-color: #000000;
+}
+
+#input::placeholder { color: #ffffff; opacity: 0.5; }
+
+/* Focus (odaklanma) anında mavileşmeyi engelleme */
+#input:focus {
+  border: 2px solid @color9; /* Mavi yerine yine senin rengin kalır */
+  outline: none;
+  box-shadow: none;
+}
+
+#prompt { color: #ffffff; margin-right: 5px; }
+
+/* Liste Elemanları */
+#text {
+  margin: 5px;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* --- Seçme Kutucuğu ve Geçiş Efekti --- */
+#entry:selected {
+  background-color: @color9;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+#entry:selected #text {
+  font-weight: bold;
+  color: #000000;
+}
+
+#entry:hover {
+  background-color: @color9;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* İkonlar */
+#img {
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+/* İç Kutular */
+#inner-box {
+  margin: 5px;
+  border: none;
+  padding: 5px;
+  background-color: transparent;
+}
+
+#scroll {
+  margin: 0px;
+  background-color: transparent;
+  border: none;
+}

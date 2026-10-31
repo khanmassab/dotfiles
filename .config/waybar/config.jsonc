@@ -1,0 +1,145 @@
+{
+    /* * 🌌 L€yzS Ricing - Waybar Configuration 🌌
+     * 🛠️  Architected by L€yzS
+     * 🖥️  Output: DP-1 | Setup: Floating Top Bar
+     */
+
+    "reload_config_on_change": false,
+    "reload_style_on_change": true,
+    "layer": "top",
+    "position": "top",
+    "height": 38,
+    "margin-top": 6,
+    "margin-left": 50,
+    "margin-right": 50,
+    "spacing": 10,
+    "mod": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+
+    /* [TR] Modül Dizilimleri / [EN] Module Layouts */
+    "modules-left": ["clock", "group/audio", "custom/media"],    
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": [
+        "tray", 
+        "cpu", 
+        "memory", 
+        "custom/separator", 
+        "custom/kbd-battery", 
+        "custom/notification", 
+        "custom/power"
+    ],
+
+    /* [TR] Saat ve Tarih / [EN] Clock & Date */
+    "clock": {
+        "format": " {:%H:%M:%S %p}",
+        "interval": 1
+    },
+
+    /* [TR] Ses Kontrolü / [EN] Audio Control */
+    /* Audio: hover to reveal a volume slider, scroll to adjust, click to mute, right-click for pavucontrol */
+    "group/audio": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 400,
+            "children-class": "audio-child",
+            "transition-left-to-right": true
+        },
+        "modules": ["pulseaudio", "pulseaudio/slider"]
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 muted",
+        "format-icons": { "default": ["", "", ""] },
+        "scroll-step": 5,
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-click-right": "pavucontrol",
+        "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "tooltip-format": "{desc}\nScroll: volume · Click: mute · Right-click: mixer"
+    },
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
+    },
+
+    /* [TR] Çalışma Alanları / [EN] Workspaces */
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "1": [], "2": [], "3": [], "4": []
+        }
+    },
+
+    /* [TR] Sistem Tepsisi / [EN] System Tray */
+    "tray": {
+        "icon-size": 16,
+        "spacing": 10
+    },
+
+    /* [TR] İşlemci Kullanımı / [EN] CPU Usage */
+    "cpu": {
+        "interval": 1,
+        "format": " {usage}%",
+        "on-click": "kitty -e btop"
+    },
+
+    /* [TR] Bellek Kullanımı / [EN] Memory Usage */
+    "memory": {
+        "interval": 1, 
+        "format": "  {used:0.1f}G/{total:0.1f}G", 
+        "on-click": "kitty -e btop"
+    },
+
+    /* [TR] Ayırıcı Çizgi / [EN] Visual Separator */
+    "custom/separator": { "format": "|" },
+
+    /* Bluetooth keyboard battery */
+    "custom/kbd-battery": {
+        "exec": "~/.config/waybar/kbd-battery.sh",
+        "return-type": "json",
+        "interval": 30
+    },
+
+    /* [TR] Bildirim Merkezi (SwayNC) / [EN] Notification Center (SwayNC) */
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        }, 
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    }, 
+
+    /* [TR] Güç Menüsü (Wlogout) / [EN] Power Menu (Wlogout) */
+    "custom/power": {
+        "format": "⏻",
+        "on-click": "wlogout -b 5 -c 0 -p layer-shell",
+        "tooltip": false
+    },
+
+    /* [TR] Medya Oynatıcı Kontrolü / [EN] Media Player Control */
+    "custom/media": {
+        "format": "<span color='#1DB954'></span>  {}", 
+        "max-length": 40,
+        "interval": 1,
+        "exec": "playerctl metadata --format '{{ artist }} - {{ title }}'",
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    }
+}
