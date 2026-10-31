@@ -6,21 +6,26 @@
 # With "watch", stays running and reprints on USB plug/unplug and Bluetooth changes.
 mac="33:9B:B4:36:17:16"
 dongle="1a2c:7fff"   # LANGTU 2.4G receiver (vendor:product)
+cable="1a2c:7f07"    # LANGTU over USB cable ("SEMICO USB Gaming Keyboard")
 kb=$'\U000f030c'     # 󰌌
 bolt=$'\U000f140b'   # 󱐋
 
+usb_present() {
+    local d
+    for d in /sys/bus/usb/devices/*; do
+        [ "$(cat "$d/idVendor" 2>/dev/null):$(cat "$d/idProduct" 2>/dev/null)" = "$1" ] && return 0
+    done
+    return 1
+}
+
 emit() {
-    local bt_pct="" wired="" dongle_present="" class text tip d
+    local bt_pct="" wired="" dongle_present="" class text tip
     if bluetoothctl info "$mac" 2>/dev/null | grep -q 'Connected: yes'; then
         bt_pct=$(bluetoothctl info "$mac" | grep -oP 'Battery Percentage:.*\(\K[0-9]+')
     fi
 
-    # cable: a USB (bus 0003) HID device that names itself LANGTU
-    grep -qil 'HID_NAME=.*LANGTU' /sys/bus/hid/devices/0003:*/uevent 2>/dev/null && wired=1
-
-    for d in /sys/bus/usb/devices/*; do
-        [ "$(cat "$d/idVendor" 2>/dev/null):$(cat "$d/idProduct" 2>/dev/null)" = "$dongle" ] && dongle_present=1 && break
-    done
+    usb_present "$cable" && wired=1
+    usb_present "$dongle" && dongle_present=1
 
     class="kbd"
     if [ -n "$wired" ]; then
