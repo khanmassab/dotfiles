@@ -218,6 +218,14 @@ window#waybar {
     min-width: 4px;
 }
 #custom-media.paused { color: alpha(@foreground, 0.55); }
+/* nothing loaded: the image module stays in the bar with class "empty", so collapse it fully */
+#image.media.empty {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
 
 /* --- ⌨️ KEYBOARD: charging / low / disconnected --- */
 #custom-kbd-battery.charging { color: @color9; }
