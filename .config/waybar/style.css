@@ -172,3 +172,20 @@ window#waybar {
 #pulseaudio.muted {
     color: @color1;
 }
+
+/* --- 🎵 NOW PLAYING: app icon + text form one pill (both hide when nothing plays) --- */
+#image.media {
+    background-color: @background;
+    border: 2px solid @color9;
+    border-right: none;
+    border-radius: 15px 0 0 15px;
+    margin: 5px 0 5px 2px;
+    padding: 0 2px 0 10px;
+}
+#custom-media {
+    border-left: none;
+    border-radius: 0 15px 15px 0;
+    margin-left: 0;
+    padding-left: 6px;
+}
+#custom-media.paused { color: alpha(@foreground, 0.55); }

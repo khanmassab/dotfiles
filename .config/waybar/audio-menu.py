@@ -17,7 +17,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
-from gi.repository import Gdk, GLib, Gtk, GtkLayerShell  # noqa: E402
+from gi.repository import Gdk, Gio, GLib, Gtk, GtkLayerShell  # noqa: E402
 
 
 def run(*args):
@@ -28,11 +28,40 @@ def pactl_json(kind):
     return json.loads(run("pactl", "-f", "json", "list", kind) or "[]")
 
 
+def sink_glyph(sink):
+    name = sink["name"]
+    if name.startswith("bluez_"):
+        return "󰋋"
+    if "hdmi" in name or "TU116" in sink["description"]:  # NVIDIA card = monitor speakers
+        return "󰍹"
+    return "󰓃"
+
+
+def app_icon(props):
+    """Gio icon for a playing stream, from its .desktop entry when there is one."""
+    try:
+        gi.require_version("GioUnix", "2.0")
+        from gi.repository import GioUnix
+        DesktopAppInfo = GioUnix.DesktopAppInfo
+    except (ValueError, ImportError):
+        DesktopAppInfo = Gio.DesktopAppInfo
+    for name in (props.get("application.process.binary"), props.get("application.icon_name"),
+                 (props.get("application.name") or "").lower()):
+        if not name:
+            continue
+        app = DesktopAppInfo.new(f"{name}.desktop")
+        if app and app.get_icon():
+            return app.get_icon()
+        if Gtk.IconTheme.get_default().has_icon(name):
+            return Gio.ThemedIcon.new(name)
+    return Gio.ThemedIcon.new("audio-x-generic")
+
+
 def radio_sink_items(menu, sinks, current, on_pick):
     """Append one radio item per output device; on_pick(sink_name) runs when one is chosen."""
     group = None
     for s in sinks:
-        item = Gtk.RadioMenuItem.new_with_label_from_widget(group, s["description"])
+        item = Gtk.RadioMenuItem.new_with_label_from_widget(group, f"{sink_glyph(s)}  {s['description']}")
         group = item
         item.set_active(s["name"] == current)
         item.connect("activate", lambda it, name=s["name"]: it.get_active() and on_pick(name))
@@ -72,7 +101,12 @@ def build_menu():
             media = media[:35] + "…"
         dest = by_index.get(st["sink"], {})
         label = f"{app} — {media}" if media else app
-        item = Gtk.MenuItem(label=f"{label}   →  {dest.get('description', '?')}")
+        item = Gtk.MenuItem()
+        row = Gtk.Box(spacing=8)
+        row.pack_start(Gtk.Image.new_from_gicon(app_icon(p), Gtk.IconSize.MENU), False, False, 0)
+        row.pack_start(Gtk.Label(label=f"{label}   →  {dest.get('description', '?')}", xalign=0),
+                       True, True, 0)
+        item.add(row)
         sub = Gtk.Menu()
         sub.get_style_context().add_class("audio-menu")
         radio_sink_items(sub, sinks, dest.get("name"),
@@ -82,7 +116,7 @@ def build_menu():
         menu.append(item)
 
     menu.append(Gtk.SeparatorMenuItem())
-    mixer = Gtk.MenuItem(label="Open mixer…")
+    mixer = Gtk.MenuItem(label="󰝚  Open mixer…")
     mixer.connect("activate", lambda *_: subprocess.Popen(["pavucontrol"]))
     menu.append(mixer)
     menu.show_all()

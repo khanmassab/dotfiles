@@ -102,38 +102,61 @@ window.thunar paned > separator {
 window.thunar scrollbar slider { background-color: alpha(@wal_fg, 0.35); }
 window.thunar scrollbar { background-color: transparent; border: none; }
 
-/* context menus (Thunar right-click, waybar audio menu) */
+/* context menus (Thunar right-click, waybar audio menu): styled like the waybar pills */
+.csd.popup decoration {
+    border-radius: 15px;
+    box-shadow: 0 4px 12px alpha(black, 0.4);
+    border: none;
+}
+window.popup,
+window.popup.background {
+    background-color: transparent;
+}
 menu,
 .menu,
 .context-menu {
-    background-color: @wal_bg;
+    background-color: alpha(@wal_bg, 0.94);
     color: @wal_fg;
-    border: 1px solid alpha(@wal_fg, 0.12);
-    padding: 4px 0;
+    border: 2px solid @wal_border;
+    border-radius: 15px;
+    padding: 6px;
 }
 menu menuitem,
 .menu menuitem {
     color: @wal_fg;
-    padding: 5px 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
     text-shadow: none;
 }
 menu menuitem:hover,
 .menu menuitem:hover {
-    background-color: alpha(@wal_accent, 0.8);
-    color: @wal_fg;
+    background-color: @wal_border;
+    color: @wal_bg;
 }
+menu menuitem:hover label { color: @wal_bg; }
 menu menuitem:disabled,
 menu menuitem:disabled label { color: alpha(@wal_fg, 0.45); }
-menu .audio-menu-header label,
-menu menuitem.audio-menu-header label {
-    color: @wal_accent2;
-    font-weight: bold;
-    font-size: 0.9em;
-}
-menu separator { background-color: alpha(@wal_fg, 0.1); margin: 4px 0; }
+menu separator { background-color: alpha(@wal_fg, 0.12); margin: 4px 8px; }
 menu radio,
 menu check {
-    color: @wal_accent2;
     background-image: none;
-    border-color: alpha(@wal_fg, 0.3);
+    background-color: transparent;
+    border: 2px solid alpha(@wal_fg, 0.5);
+    -gtk-icon-source: none;
+    min-width: 10px;
+    min-height: 10px;
+}
+menu radio:checked { background-color: @wal_border; border-color: @wal_border; }
+menu menuitem:hover radio { border-color: @wal_bg; }
+menu arrow { color: alpha(@wal_fg, 0.6); }
+
+/* the audio menu also uses the bar's font */
+menu.audio-menu,
+menu.audio-menu * {
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: bold;
+}
+menu.audio-menu menuitem.audio-menu-header label {
+    color: @wal_border;
+    font-size: 0.85em;
 }

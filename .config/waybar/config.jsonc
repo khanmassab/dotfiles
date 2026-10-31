@@ -19,7 +19,7 @@
     "gtk-layer-shell": true,
 
     /* [TR] Modül Dizilimleri / [EN] Module Layouts */
-    "modules-left": ["clock", "group/audio", "custom/media"],    
+    "modules-left": ["clock", "group/audio", "group/media"],    
     "modules-center": ["hyprland/workspaces"],
     "modules-right": [
         "tray", 
@@ -133,13 +133,25 @@
     },
 
     /* [TR] Medya Oynatıcı Kontrolü / [EN] Media Player Control */
+    /* Now playing: real app icon of whichever player is playing + track text */
+    "group/media": {
+        "orientation": "horizontal",
+        "modules": ["image#media", "custom/media"]
+    },
+    "image#media": {
+        "exec": "python3 -I ~/.config/waybar/media.py icon",
+        "size": 16,
+        "interval": 2,
+        "on-click": "python3 -I ~/.config/waybar/media.py play-pause"
+    },
     "custom/media": {
-        "format": "<span color='#1DB954'></span>  {}", 
+        "format": "{}",
+        "return-type": "json",
         "max-length": 40,
         "interval": 1,
-        "exec": "playerctl metadata --format '{{ artist }} - {{ title }}'",
-        "on-click": "playerctl play-pause",
-        "on-scroll-up": "playerctl next",
-        "on-scroll-down": "playerctl previous"
+        "exec": "python3 -I ~/.config/waybar/media.py text",
+        "on-click": "python3 -I ~/.config/waybar/media.py play-pause",
+        "on-scroll-up": "python3 -I ~/.config/waybar/media.py next",
+        "on-scroll-down": "python3 -I ~/.config/waybar/media.py previous"
     }
 }
