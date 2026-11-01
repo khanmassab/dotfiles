@@ -50,13 +50,44 @@ def icon_path(player):
     except (ValueError, ImportError):
         DesktopAppInfo = Gio.DesktopAppInfo
 
-    entry = desktop_entry(player)
-    app = DesktopAppInfo.new(f"{entry}.desktop")
-    icon = app.get_icon() if app else Gio.ThemedIcon.new(entry)
-    info = Gtk.IconTheme.get_default().lookup_by_gicon(icon, 64, 0) if icon else None
-    if info is None:
-        info = Gtk.IconTheme.get_default().lookup_icon("audio-x-generic", 64, 0)
-    return info.get_filename() if info else ""
+    theme = Gtk.IconTheme.get_default()
+    # names the player goes by, e.g. "spotify" for org.mpris.MediaPlayer2.spotify,
+    # "chromium" for chromium.instance1234
+    names = [n.lower() for n in (desktop_entry(player), player.split(".")[0]) if n]
+
+    def lookup(gicon):
+        info = theme.lookup_by_gicon(gicon, 64, 0) if gicon else None
+        return info.get_filename() if info else None
+
+    # 1. exact .desktop file (Zen: zen.desktop). new() raises instead of returning None.
+    for n in names:
+        try:
+            app = DesktopAppInfo.new(f"{n}.desktop")
+        except TypeError:
+            app = None
+        if app and (path := lookup(app.get_icon())):
+            return path
+
+    # 2. any installed app whose id, executable, window class or name matches
+    #    (Spotify reports "spotify" but installs spotify-launcher.desktop)
+    def fields(app):
+        exe = (app.get_executable() or "").rsplit("/", 1)[-1]
+        wm = app.get_string("StartupWMClass") if hasattr(app, "get_string") else None
+        return [(app.get_id() or "").removesuffix(".desktop"), exe, wm or "", app.get_name() or ""]
+
+    apps = Gio.AppInfo.get_all()
+    for exact in (True, False):          # exact field match first, then prefix match
+        for app in apps:
+            vals = [v.lower() for v in fields(app) if v]
+            if any((v == n) if exact else v.startswith(n) for n in names for v in vals):
+                if path := lookup(app.get_icon()):
+                    return path
+
+    # 3. an icon theme entry with the player's name, then a generic music icon
+    for n in names + ["audio-x-generic"]:
+        if theme.has_icon(n) and (path := lookup(Gio.ThemedIcon.new(n))):
+            return path
+    return ""
 
 
 def main():
