@@ -73,6 +73,7 @@ window#waybar {
 #tray, 
 #cpu, 
 #memory, 
+#network, 
 #custom-kbd-battery, 
 #custom-notification, 
 #custom-media {
@@ -133,6 +134,7 @@ window#waybar {
 #custom-kbd-battery:hover, 
 #tray:hover, 
 #memory:hover, 
+#network:hover, 
 #cpu:hover, 
 #custom-notification:hover {
     /* [TR] Fare ile etkileşim anında renk değişimi. */
@@ -231,3 +233,11 @@ window#waybar {
 #custom-kbd-battery.charging { color: @color9; }
 #custom-kbd-battery.low { color: @color1; }
 #custom-kbd-battery.disconnected { color: alpha(@foreground, 0.4); }
+
+/* no tray icons: don't leave an empty pill behind */
+#tray.empty {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}

@@ -6,6 +6,7 @@
   media.py playicon        play/pause glyph for the hover controls
   media.py end             right cap of the pill (blank while playing, empty to hide)
   media.py play-pause|next|previous   control that same player
+  media.py focus           jump to that player's window (launch the app if it has none)
 """
 import html
 import json
@@ -38,35 +39,36 @@ def desktop_entry(player):
     return out.split("'")[1] if "'" in out else player.split(".")[0]
 
 
-def icon_path(player):
+def _gi():
     import gi
     gi.require_version("Gtk", "3.0")
     from gi.repository import Gio, Gtk
-
     try:
         gi.require_version("GioUnix", "2.0")
         from gi.repository import GioUnix
-        DesktopAppInfo = GioUnix.DesktopAppInfo
+        return Gio, Gtk, GioUnix.DesktopAppInfo
     except (ValueError, ImportError):
-        DesktopAppInfo = Gio.DesktopAppInfo
+        return Gio, Gtk, Gio.DesktopAppInfo
 
-    theme = Gtk.IconTheme.get_default()
-    # names the player goes by, e.g. "spotify" for org.mpris.MediaPlayer2.spotify,
-    # "chromium" for chromium.instance1234
-    names = [n.lower() for n in (desktop_entry(player), player.split(".")[0]) if n]
 
-    def lookup(gicon):
-        info = theme.lookup_by_gicon(gicon, 64, 0) if gicon else None
-        return info.get_filename() if info else None
+def player_names(player):
+    """Names the player goes by: "spotify" for org.mpris.MediaPlayer2.spotify,
+    "chromium" for chromium.instance1234, Zen's DesktopEntry "zen"."""
+    return list(dict.fromkeys(n.lower() for n in (desktop_entry(player), player.split(".")[0]) if n))
 
+
+def find_apps(player):
+    """Installed apps that belong to this player, best match first."""
+    Gio, _, DesktopAppInfo = _gi()
+    names = player_names(player)
     # 1. exact .desktop file (Zen: zen.desktop). new() raises instead of returning None.
     for n in names:
         try:
             app = DesktopAppInfo.new(f"{n}.desktop")
         except TypeError:
             app = None
-        if app and (path := lookup(app.get_icon())):
-            return path
+        if app:
+            yield app
 
     # 2. any installed app whose id, executable, window class or name matches
     #    (Spotify reports "spotify" but installs spotify-launcher.desktop)
@@ -80,19 +82,83 @@ def icon_path(player):
         for app in apps:
             vals = [v.lower() for v in fields(app) if v]
             if any((v == n) if exact else v.startswith(n) for n in names for v in vals):
-                if path := lookup(app.get_icon()):
-                    return path
+                yield app
 
-    # 3. an icon theme entry with the player's name, then a generic music icon
-    for n in names + ["audio-x-generic"]:
+
+def icon_path(player):
+    Gio, Gtk, _ = _gi()
+    theme = Gtk.IconTheme.get_default()
+
+    def lookup(gicon):
+        info = theme.lookup_by_gicon(gicon, 64, 0) if gicon else None
+        return info.get_filename() if info else None
+
+    for app in find_apps(player):
+        if path := lookup(app.get_icon()):
+            return path
+    # an icon theme entry with the player's name, then a generic music icon
+    for n in player_names(player) + ["audio-x-generic"]:
         if theme.has_icon(n) and (path := lookup(Gio.ThemedIcon.new(n))):
             return path
     return ""
 
 
+def player_pid(player):
+    out = run("gdbus", "call", "--session", "--dest", "org.freedesktop.DBus",
+              "--object-path", "/org/freedesktop/DBus", "--method",
+              "org.freedesktop.DBus.GetConnectionUnixProcessID", f"org.mpris.MediaPlayer2.{player}")
+    # output looks like: (uint32 2409,)
+    digits = "".join(ch for ch in out.split()[-1] if ch.isdigit()) if out else ""
+    return int(digits) if digits else None
+
+
+def ancestors(pid):
+    """pid and its parents (a browser's MPRIS may live in a child process)."""
+    while pid and pid > 1:
+        yield pid
+        try:
+            with open(f"/proc/{pid}/stat") as f:
+                pid = int(f.read().rsplit(")", 1)[1].split()[1])
+        except (OSError, ValueError, IndexError):
+            return
+
+
+def focus_player(player):
+    """Jump to the player's window (switching workspace); launch the app if it has none."""
+    import re
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+    from importlib import import_module
+    fol = import_module("focus-or-launch")
+
+    wins = fol.clients()
+    pids = set(ancestors(player_pid(player)))
+    match = [c for c in wins if c["pid"] in pids]
+    if not match:
+        names = player_names(player)
+        for app in find_apps(player):
+            wm = app.get_string("StartupWMClass") if hasattr(app, "get_string") else None
+            names += [n.lower() for n in (wm, (app.get_id() or "").removesuffix(".desktop")) if n]
+            break
+        rx = re.compile("|".join(f"^{re.escape(n)}$" for n in names), re.I)
+        match = [c for c in wins if rx.search(c["class"]) or rx.search(c["initialClass"])]
+    if match:
+        fol.focus(min(match, key=lambda c: c["focusHistoryID"]))
+        return
+    # playing but windowless (e.g. Spotify closed to tray): open the app on this workspace
+    for app in find_apps(player):
+        app.launch([], None)
+        return
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "text"
     player = active_player()
+
+    if mode == "focus":
+        if player:
+            focus_player(player)
+        return
 
     if mode in ("play-pause", "next", "previous"):
         if player:

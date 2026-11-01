@@ -23,6 +23,7 @@
     "modules-center": ["hyprland/workspaces"],
     "modules-right": [
         "tray", 
+        "network",
         "cpu", 
         "memory", 
         "custom/separator", 
@@ -76,21 +77,35 @@
     /* [TR] Sistem Tepsisi / [EN] System Tray */
     "tray": {
         "icon-size": 16,
+        "show-passive-items": true,
         "spacing": 10
+    },
+
+    /* Wifi: click to jump to (or open) nmtui */
+    "network": {
+        "interval": 5,
+        "format-wifi": "{icon} {essid}",
+        "format-ethernet": "󰈀 wired",
+        "format-disconnected": "󰤮 offline",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "tooltip-format-wifi": "{essid} · {signalStrength}% · {ipaddr}",
+        "tooltip-format-ethernet": "{ifname} · {ipaddr}",
+        "max-length": 24,
+        "on-click": "python3 -I ~/.config/waybar/focus-or-launch.py '^nmtui$' kitty --class nmtui -e nmtui"
     },
 
     /* [TR] İşlemci Kullanımı / [EN] CPU Usage */
     "cpu": {
         "interval": 1,
         "format": " {usage}%",
-        "on-click": "kitty -e btop"
+        "on-click": "python3 -I ~/.config/waybar/focus-or-launch.py '^(rice-btop|btop)$' kitty --class btop -e btop"
     },
 
     /* [TR] Bellek Kullanımı / [EN] Memory Usage */
     "memory": {
         "interval": 1, 
         "format": "  {used:0.1f}G/{total:0.1f}G", 
-        "on-click": "kitty -e btop"
+        "on-click": "python3 -I ~/.config/waybar/focus-or-launch.py '^(rice-btop|btop)$' kitty --class btop -e btop"
     },
 
     /* [TR] Ayırıcı Çizgi / [EN] Visual Separator */
@@ -172,7 +187,8 @@
         "exec": "python3 -I ~/.config/waybar/media.py icon",
         "size": 16,
         "interval": 2,
-        "on-click": "python3 -I ~/.config/waybar/media.py play-pause"
+        "on-click": "python3 -I ~/.config/waybar/media.py focus",
+        "on-click-middle": "python3 -I ~/.config/waybar/media.py play-pause"
     },
     "custom/media": {
         "format": "{}",
@@ -180,7 +196,8 @@
         "max-length": 40,
         "interval": 1,
         "exec": "python3 -I ~/.config/waybar/media.py text",
-        "on-click": "python3 -I ~/.config/waybar/media.py play-pause",
+        "on-click": "python3 -I ~/.config/waybar/media.py focus",
+        "on-click-middle": "python3 -I ~/.config/waybar/media.py play-pause",
         "on-scroll-up": "python3 -I ~/.config/waybar/media.py next",
         "on-scroll-down": "python3 -I ~/.config/waybar/media.py previous"
     }
