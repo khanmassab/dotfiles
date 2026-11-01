@@ -1,11 +1,11 @@
 #!/bin/bash
 # Restore this rice on a fresh Arch + Hyprland install.
-# Assumes yay and the chaotic-aur repo (for wlogout, mpvpaper, grimblast-git, tty-clock).
+# Assumes yay and the chaotic-aur repo (for wlogout, mpvpaper, grimblast-git, tty-clock, and waybar-git, which speaks Hyprland's Lua IPC so workspace clicks work).
 set -e
 cd "$(dirname "$0")"
 
 echo "==> Installing packages"
-sudo pacman -S --needed hyprland kitty waybar wofi awww swaync hyprlock hypridle hyprpolkitagent \
+sudo pacman -S --needed hyprland kitty waybar-git wofi awww swaync hyprlock hypridle hyprpolkitagent \
     cava btop cmatrix fastfetch cliphist wl-clipboard grim slurp swappy ffmpeg mpv rsync \
     pavucontrol playerctl brightnessctl network-manager-applet thunar gnome-keyring qt6-wayland papirus-icon-theme \
     ttf-jetbrains-mono-nerd sddm wlogout mpvpaper grimblast-git tty-clock
