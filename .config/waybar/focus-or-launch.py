@@ -19,8 +19,16 @@ def clients():
 
 
 def focus(window):
+    """Focus a window without moving the cursor (Hyprland warps it to the window's center)."""
+    pos = subprocess.run(["hyprctl", "cursorpos"], capture_output=True, text=True).stdout.strip()
     subprocess.run(["hyprctl", "dispatch",
                     f'hl.dsp.focus({{window="address:{window["address"]}"}})'],
+                   capture_output=True)
+    try:
+        x, y = (int(v) for v in pos.split(","))
+    except ValueError:
+        return
+    subprocess.run(["hyprctl", "dispatch", f"hl.dsp.cursor.move({{x={x},y={y}}})"],
                    capture_output=True)
 
 
