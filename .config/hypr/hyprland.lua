@@ -60,6 +60,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("/usr/lib/hyprpolkitagent/hyprpolkitagent")
 	hl.exec_cmd("nm-applet")
 	hl.exec_cmd("blueman-applet")
+	hl.exec_cmd("~/.config/hypr/scripts/bt-audio.sh")
 end)
 
 -------------------------------
