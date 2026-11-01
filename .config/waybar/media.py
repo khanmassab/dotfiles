@@ -59,8 +59,13 @@ def player_names(player):
 
 def find_apps(player):
     """Installed apps that belong to this player, best match first."""
+    return find_apps_by_names(player_names(player))
+
+
+def find_apps_by_names(names):
+    """Installed apps matching any of these names, best match first. Also used by audio-menu.py."""
     Gio, _, DesktopAppInfo = _gi()
-    names = player_names(player)
+    names = [n.lower() for n in names if n]
     # 1. exact .desktop file (Zen: zen.desktop). new() raises instead of returning None.
     for n in names:
         try:

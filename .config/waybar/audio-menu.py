@@ -38,22 +38,22 @@ def sink_glyph(sink):
 
 
 def app_icon(props):
-    """Gio icon for a playing stream, from its .desktop entry when there is one."""
-    try:
-        gi.require_version("GioUnix", "2.0")
-        from gi.repository import GioUnix
-        DesktopAppInfo = GioUnix.DesktopAppInfo
-    except (ValueError, ImportError):
-        DesktopAppInfo = Gio.DesktopAppInfo
-    for name in (props.get("application.process.binary"), props.get("application.icon_name"),
-                 (props.get("application.name") or "").lower()):
-        if not name:
-            continue
-        app = DesktopAppInfo.new(f"{name}.desktop")
-        if app and app.get_icon():
+    """Gio icon for a playing stream, from its installed app when one matches
+    (same lookup as the media pill: Spotify's stream says "spotify" but the app
+    is spotify-launcher.desktop)."""
+    import os
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+    from media import find_apps_by_names
+    names = [props.get("application.process.binary"), props.get("application.icon_name"),
+             props.get("application.name")]
+    for app in find_apps_by_names(names):
+        if app.get_icon():
             return app.get_icon()
-        if Gtk.IconTheme.get_default().has_icon(name):
-            return Gio.ThemedIcon.new(name)
+    theme = Gtk.IconTheme.get_default()
+    for name in filter(None, names):
+        if theme.has_icon(name.lower()):
+            return Gio.ThemedIcon.new(name.lower())
     return Gio.ThemedIcon.new("audio-x-generic")
 
 
