@@ -19,7 +19,8 @@
 /* [TR] Arka plan - Bulanık kilit ekranı efekti */
 /* [EN] Background - Blurred lock screen effect */
 window {
-    background-color: rgba(0, 0, 0, 0);
+    /* light tint over Hyprland's blur (layer rule "wlogout-blur" in hyprland.lua) */
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 /* --- [TR] DİKEY KART TASARIMI / [EN] VERTICAL CARD DESIGN --- */

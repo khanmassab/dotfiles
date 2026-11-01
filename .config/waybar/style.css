@@ -10,6 +10,9 @@
 /* [TR] Duvar kağıdına göre renkleri otomatik senkronize eden Pywal/Matugen bağlantısı. */
 /* [EN] Pywal/Matugen connection that automatically synchronizes colors based on the wallpaper. */
 @import "../../.cache/wal/colors-waybar.css";
+/* tray menus (wifi, Spotify) are drawn by waybar, where the "*" reset below would strip the
+   global GTK menu style; importing it here lets its more specific menu rules win again */
+@import url("file:///home/massab/.config/gtk-3.0/gtk.css");
 
 /* 🛠️ GLOBAL STYLING / GENEL STİL */
 * {

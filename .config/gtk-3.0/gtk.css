@@ -147,7 +147,9 @@ menu check {
     min-width: 10px;
     min-height: 10px;
 }
-menu radio:checked { background-color: @wal_border; border-color: @wal_border; }
+menu radio:checked,
+menu check:checked { background-color: @wal_border; border-color: @wal_border; }
+menu check { border-radius: 4px; margin-right: 6px; }
 menu menuitem:hover > radio { border-color: @wal_bg; }
 menu arrow { color: alpha(@wal_fg, 0.6); }
 

@@ -415,3 +415,10 @@ hl.window_rule({
 })
 --hl.windowrule("opaque", "false", "class:^(kitty)^")
 --hl.windowrule("blur", "true", "class:^(kitty)^")
+
+-- Power menu (wlogout): blur everything behind it
+hl.layer_rule({
+	name  = "wlogout-blur",
+	match = { namespace = "^logout_dialog$" },
+	blur  = true,
+})
