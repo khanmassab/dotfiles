@@ -58,8 +58,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("wl-paste --type image --watch cliphist store")
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'")
 	hl.exec_cmd("/usr/lib/hyprpolkitagent/hyprpolkitagent")
-	-- nm-applet replaced by the waybar network pill (click opens nmtui)
-	-- hl.exec_cmd("nm-applet")
+	hl.exec_cmd("nm-applet")
 end)
 
 -------------------------------

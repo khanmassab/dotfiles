@@ -73,7 +73,6 @@ window#waybar {
 #tray, 
 #cpu, 
 #memory, 
-#network, 
 #custom-kbd-battery, 
 #custom-notification, 
 #custom-media {
@@ -132,7 +131,6 @@ window#waybar {
 #custom-kbd-battery:hover, 
 #tray:hover, 
 #memory:hover, 
-#network:hover, 
 #cpu:hover, 
 #custom-notification:hover {
     /* [TR] Fare ile etkileşim anında renk değişimi. */

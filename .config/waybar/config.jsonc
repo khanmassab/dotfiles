@@ -23,7 +23,6 @@
     "modules-center": ["hyprland/workspaces"],
     "modules-right": [
         "tray", 
-        "network",
         "cpu", 
         "memory", 
         "custom/separator", 
@@ -79,19 +78,6 @@
         "icon-size": 16,
         "show-passive-items": true,
         "spacing": 10
-    },
-
-    /* Wifi: click to jump to (or open) nmtui */
-    "network": {
-        "interval": 5,
-        "format-wifi": "{icon} {essid}",
-        "format-ethernet": "󰈀 wired",
-        "format-disconnected": "󰤮 offline",
-        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-        "tooltip-format-wifi": "{essid} · {signalStrength}% · {ipaddr}",
-        "tooltip-format-ethernet": "{ifname} · {ipaddr}",
-        "max-length": 24,
-        "on-click": "python3 -I ~/.config/waybar/focus-or-launch.py '^nmtui$' kitty --class nmtui -e nmtui"
     },
 
     /* [TR] İşlemci Kullanımı / [EN] CPU Usage */
