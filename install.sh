@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 echo "==> Installing packages"
 sudo pacman -S --needed hyprland kitty waybar-git wofi awww swaync hyprlock hypridle hyprpolkitagent \
     cava btop cmatrix fastfetch cliphist wl-clipboard grim slurp swappy ffmpeg mpv rsync \
-    pavucontrol playerctl brightnessctl network-manager-applet thunar gnome-keyring qt6-wayland papirus-icon-theme \
+    pavucontrol playerctl brightnessctl network-manager-applet blueman thunar gnome-keyring qt6-wayland papirus-icon-theme \
     ttf-jetbrains-mono-nerd sddm wlogout mpvpaper grimblast-git tty-clock
 yay -S --needed python-pywal16
 

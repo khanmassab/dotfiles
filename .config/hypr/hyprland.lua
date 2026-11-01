@@ -59,6 +59,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'")
 	hl.exec_cmd("/usr/lib/hyprpolkitagent/hyprpolkitagent")
 	hl.exec_cmd("nm-applet")
+	hl.exec_cmd("blueman-applet")
 end)
 
 -------------------------------
