@@ -113,12 +113,10 @@ window#waybar {
     background-color: @background;
     color: @color9;            
     border: 2px solid @color9; 
-    border-radius: 50%;
-    min-width: 25px;
-    min-height: 25px;
+    border-radius: 15px;
     font-size: 13px;
-    margin: 4px 10px 5px 5px;
-    padding-right: 2px; 
+    margin: 5px 10px 5px 2px;   /* same height as the other pills */
+    padding: 0px 12px;          /* even on both sides so the glyph is centered */
     transition: all 0.3s ease;
 }
 
